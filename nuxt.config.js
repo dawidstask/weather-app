@@ -1,0 +1,99 @@
+const pkg = require('./package')
+const nodeExternals = require('webpack-node-externals')
+
+/*
+** Api (https://openweathermap.org/) id key
+*/
+const apiConfig = {
+  API_BASE_URL: 'http://api.openweathermap.org/data/2.5/weather',
+  API_ID: '9c1daad0a10384a842139eee0dd55e0a',
+  API_UNITS_FORMAT: 'metric'
+}
+
+/*
+ ** Environment variables
+ */
+const environment = {
+  API_URL: `${ apiConfig.API_BASE_URL }?appid=${ apiConfig.API_ID }&units=${ apiConfig.API_UNITS_FORMAT }&`
+}
+
+module.exports = {
+  mode: 'spa',
+
+  /*
+  ** Headers of the page
+  */
+  head: {
+    title: pkg.name,
+    meta: [
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: pkg.description }
+    ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+    ]
+  },
+
+  /*
+  ** Customize the progress-bar color
+  */
+  loading: { color: '#FFFFFF' },
+
+  /*
+  ** Global CSS
+  */
+  css: [
+    'vuetify/src/stylus/main.styl'
+  ],
+
+  /*
+  ** Plugins to load before mounting the App
+  */
+  plugins: [
+    '@/plugins/vuetify'
+  ],
+
+  /*
+  ** Nuxt.js modules
+  */
+  modules: [
+    // Doc: https://github.com/nuxt-community/axios-module#usage
+    '@nuxtjs/axios'
+  ],
+  /*
+  ** Axios module configuration
+  */
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: environment.API_URL,
+  },
+
+  /*
+  ** Build configuration
+  */
+  build: {
+    /*
+    ** You can extend webpack config here
+    */
+    extend(config, ctx) {
+      // Run ESLint on save
+      if (ctx.isDev && ctx.isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+      }
+      if (ctx.isServer) {
+        config.externals = [
+          nodeExternals({
+            whitelist: [/^vuetify/]
+          })
+        ]
+      }
+    }
+  }
+}
