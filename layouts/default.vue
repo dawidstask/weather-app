@@ -34,6 +34,7 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+  
   .footer {
     padding-left: 15px;
   }
