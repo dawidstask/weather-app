@@ -28,7 +28,10 @@ export default {
     const actualDate = new Date().toISOString().slice(0, 10);
 
     list.forEach(item => {
-      if (item.dt_txt.slice(11, 20) === '12:00:00' && item.dt_txt.slice(0, 10) !== actualDate) {
+      const itemDate = item.dt_txt.slice(11, 20);
+      const itemTime = item.dt_txt.slice(0, 10);
+
+      if (itemDate === '12:00:00' && itemTime !== actualDate) {
         console.log(item);
         fiveDayForecast.push(item);
       }
