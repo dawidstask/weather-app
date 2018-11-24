@@ -8,7 +8,8 @@
       md6>
       <weather-card 
         :weather-data="weatherData" 
-        :forecast-data="forecastData"/>
+        :forecast-data="forecastData"
+        :actual-date="actualDate"/>
     </v-flex>
   </v-layout>
 </template>
@@ -20,18 +21,23 @@ export default {
   components: {
     WeatherCard,
   },
+  data() {
+    return {
+      actualDate: new Date().toISOString().slice(0, 10)
+    }
+  },
   async asyncData({ app }) {
     const location = await app.$axios.$get('http://extreme-ip-lookup.com/json/');
     const data = await app.$axios.$get(`${ app.$axios.defaults.baseURL }lat=${ location.lat }&lon=${ location.lon }`);
     const { list } = await app.$axios.$get('http://api.openweathermap.org/data/2.5/forecast?appid=9c1daad0a10384a842139eee0dd55e0a&units=metric&q=Szczecin');
     const fiveDayForecast = [];
-    const actualDate = new Date().toISOString().slice(0, 10);
+    // const actualDate = new Date().toISOString().slice(0, 10);
 
     list.forEach(item => {
       const itemDate = item.dt_txt.slice(11, 20);
       const itemTime = item.dt_txt.slice(0, 10);
 
-      if (itemDate === '12:00:00' && itemTime !== actualDate) {
+      if (itemDate === '12:00:00' && itemTime !== this.actualDate) {
         console.log(item);
         fiveDayForecast.push(item);
       }

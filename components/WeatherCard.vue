@@ -24,7 +24,7 @@
           :hide-details="true"
           v-model="searchValue"
           append-icon="search"
-          label="Location"
+          label="Select location"
           solo
           @click:append="search"
           @keyup.enter="search"/>
@@ -75,12 +75,16 @@ export default {
       type: Array,
       required: true,
     },
+    actualDate: {
+      type: String,
+      required: true,
+    }
   },
   data() {
     return {
       data: this.weatherData,
       searchValue: null,
-      actualDate: new Date().toISOString().slice(0, 10),
+      // actualDate: new Date().toISOString().slice(0, 10),
       weekday: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     }
   },
@@ -113,8 +117,12 @@ export default {
   .v-card__title {
     padding-bottom: 0px;
   }
+  .v-card__actions {
+    justify-content: space-between;
+  }
   .actual-date {
     padding-left: 16px;
+    opacity: 0.7;
   }
   .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) .v-input__slot {
     box-shadow: none;
