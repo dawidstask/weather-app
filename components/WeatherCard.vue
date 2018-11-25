@@ -42,6 +42,7 @@
             xs12
             md7>
             <p class="temperature">{{ Math.round(data.main.temp) }} &deg;C</p>
+            <p><img :src="getIconPath(data.weather[0].icon)"></p>
             <p>Weather: {{ data.weather[0].description }}</p>
             <p>Sunrise: {{ convertToTime(data.sys.sunrise) }}</p>
             <p>Sunset: {{ convertToTime(data.sys.sunset) }}</p>
@@ -58,6 +59,7 @@
         <p>{{ getDayOfWeek(data.dt_txt) }}</p>
         <p>{{ data.dt_txt }}</p>
         <p>{{ Math.round(data.main.temp) }} &deg;C</p>
+        <p><img :src="getIconPath(data.weather[0].icon)"></p>
         <p>{{ data.weather[0].description }}</p>
       </span>
     </v-card-actions>
@@ -84,8 +86,27 @@ export default {
     return {
       data: this.weatherData,
       searchValue: null,
-      // actualDate: new Date().toISOString().slice(0, 10),
       weekday: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      iconMap: {
+        '01d': 'sun',
+        '02d': 'cloudy',
+        '03d': 'clouds',
+        '04d': 'clouds',
+        '09d': 'rain-1',
+        '10d': 'rain',
+        '11d': 'rain-2',
+        '13d': 'snow',
+        '50d': 'clouds-1',
+        '01n': 'moon-2',
+        '02n': 'cloud',
+        '03n': 'cloudy-2',
+        '04n': 'moon',
+        '09n': 'night-rain',
+        '10n': 'night-rain',
+        '11n': 'rain-2',
+        '13n': 'snow',
+        '50n': 'moon-1'
+      },
     }
   },
   created() {
@@ -102,6 +123,9 @@ export default {
       const newDate = new Date(date);
       return this.weekday[newDate.getDay()];
     },
+    getIconPath(iconCode) {
+      return `/icons/svg/${ this.iconMap[iconCode] }.svg`;
+    }
   }
 }
 </script>
@@ -134,5 +158,8 @@ export default {
   }
   .temperature {
     font-size: 72px;
+  }
+  img {
+    height: 120px;
   }
 </style>
